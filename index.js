@@ -1,3 +1,4 @@
+dotenv.config()
 import express  from "express"
 import cors from "cors"
 import welcome from "./controllers/welcome.js"
@@ -5,6 +6,7 @@ import articles from "./routes/articles.js";
 import names from "./routes/articles.js";
 import users from './routes/users.js'
 import mongoose from "mongoose"
+import dotenv from "dotenv"
 
 
 
@@ -12,7 +14,7 @@ const app= express();
 app.use(cors());
 
 const connect= ()=>{
-    mongoose.connect("mongodb+srv://robs:robs@cluster0.cjzod8h.mongodb.net/?retryWrites=true&w=majority")
+    mongoose.connect(process.env.MONGODB_LINK)
 .then(()=>{
 console.log("connected to mongdb")
 })
@@ -30,7 +32,7 @@ app.use("/api/v1/articles", articles)
 
 app.use("/api/v1", names);
 
-app.use("api/v1/users", users)
+app.use("/api/v1/users", users)
 
 
 const port= 3000;

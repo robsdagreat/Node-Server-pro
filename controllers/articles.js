@@ -128,8 +128,10 @@ const readArticle= async (req,res)=>{
 
 
 const readArticlelimit= async (req,res)=>{
-   try{const page= req.query.page;
-    const range= req.query.limit;
+   try{
+
+    const page= req.query.page || 1;
+    const range= req.query.limit || 5;
 
     let limitation= range * page;
     let start= limitation - range;
@@ -192,7 +194,26 @@ const readArticlelimit= async (req,res)=>{
         }
       
 
-    
+  const deleteArticle = async (req, res)=>{
+            const articleId = req.params.articleId;
+            let found = await ArticleModel.find({_id:articleId});
+            if(found.length == 0){
+                res.status(404).json({
+                    message:"Article trying to delete is not available",
+                    error:"Article not found",
+                    data:null
+                });
+            }else{
+        
+                let result = await ArticleModel.deleteOne({_id:articleId});
+        
+                res.status(200).json({
+                    message:"Article"+ articleId +" deleted successfully",
+                    error:null,
+                    data:result
+                });
+            }
+  }  
 
     
    
@@ -203,45 +224,13 @@ const readArticlelimit= async (req,res)=>{
 
 
 
-const createUser= (req,res)=>{
-    try{
-        res.send("this is the user create controllers")
-    }
-    catch(err){
-        console.log("this is the error controllers", err)
-     }
-    
-}
 
-const readUser= (req,res)=>{
-    try{
-        res.send("this is the user read controllers")
-    }
-    catch(err){
-        console.log("this is the error controllers", err)
-     }
-    
-}
 
-const updateUser= (req,res)=>{
-    try{
-        res.send("this is the user update controllers")
-    }
-    catch(err){
-        console.log("this is the error controllers", err)
-     }
-    
-}
 
-// const deleteUser= async (req,res)=>{
-//   try{
-//       const articleId= req.params.articleId;
-//       const found= await articleSchema.find()
-//     }
-//     catch(err){
-//          console.log("this is the error controllers", err)
-//      }
-    
-// }
 
-export  {createArticle, readArticle, createUser, readUser, updateArticle, readArticlelimit} 
+export  {createArticle, readArticle,deleteArticle, updateArticle, readArticlelimit} 
+
+
+
+
+
